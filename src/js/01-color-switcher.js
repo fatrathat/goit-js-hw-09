@@ -19,7 +19,7 @@ const changeBackgroundColor = () => {
 const startChangeColor = () => {
   refs.startBtn.disabled = true;
   intervalId = setInterval(changeBackgroundColor, 1000);
-  console.log('Старт інтервала з id:', intervalId);
+  console.log('Старт id:', intervalId);
 };
 
 // Стоп зміни кольору
@@ -27,7 +27,7 @@ const stopChangeColor = () => {
   if (intervalId !== null) {
     clearInterval(intervalId);
     refs.startBtn.disabled = false;
-    console.log('Стоп інтервала з id:', intervalId);
+    console.log('Стоп id:', intervalId);
     intervalId = null;
   } else alert('Зміна кольору не запущена');
 };
