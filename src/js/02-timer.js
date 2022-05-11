@@ -55,13 +55,17 @@ const convertMs = ms => {
   return { days, hours, minutes, seconds };
 };
 
+const addLeadingZero = value => {
+  return value.padStart(2, 0);
+};
+
 const startTimer = () => {
   const ms = convertMs(selectDay.getTime() - options.defaultDate.getTime());
   const { days, hours, minutes, seconds } = ms;
-  refs.days.textContent = days;
-  refs.hours.textContent = hours;
-  refs.minutes.textContent = minutes;
-  refs.seconds.textContent = seconds;
+  refs.days.textContent = addLeadingZero(days.toString());
+  refs.hours.textContent = addLeadingZero(hours.toString());
+  refs.minutes.textContent = addLeadingZero(minutes.toString());
+  refs.seconds.textContent = addLeadingZero(seconds.toString());
 };
 
 refs.btnStart.addEventListener('click', startTimer);
