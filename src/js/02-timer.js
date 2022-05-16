@@ -1,5 +1,8 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
+
+let selectDay = null;
 
 const refs = {
   input: document.querySelector('#datetime-picker'),
@@ -7,16 +10,14 @@ const refs = {
   timer: document.querySelector('.timer'),
 };
 
-let selectDay = null;
-
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() < options.defaultDate.getTime()) {
-      alert('Please choose a date in the future!');
+    if (selectedDates[0] < options.defaultDate) {
+      Notiflix.Notify.failure('Please choose a date in the future!');
       selectedDates[0] = options.defaultDate;
       refs.btnStart.disabled = true;
     } else {
@@ -53,26 +54,20 @@ const addLeadingZero = value => {
 };
 
 const initializeTimer = () => {
-  const days = document.querySelector('[data-days]');
-  const hours = document.querySelector('[data-hours]');
-  const minutes = document.querySelector('[data-minutes]');
-  const seconds = document.querySelector('[data-seconds]');
+  const daysContent = document.querySelector('[data-days]');
+  const hoursContent = document.querySelector('[data-hours]');
+  const minutesContent = document.querySelector('[data-minutes]');
+  const secondsContent = document.querySelector('[data-seconds]');
 
-  const updateTimer = () => {
-    const ms = convertMs(selectDay.getTime() - options.defaultDate.getTime());
+  setInterval(() => {
+    let now = new Date();
+    const { days, hours, minutes, seconds } = convertMs(selectDay - now);
 
-    days.innerHTML = addLeadingZero(ms.days.toString());
-    hours.innerHTML = addLeadingZero(ms.hours.toString());
-    minutes.innerHTML = addLeadingZero(ms.minutes.toString());
-    seconds.innerHTML = addLeadingZero(ms.seconds.toString());
-
-    if (ms <= 0) {
-      clearInterval(timeinterval);
-    }
-  };
-
-  updateTimer();
-  const timeinterval = setInterval(updateTimer, 1000);
+    daysContent.innerHTML = addLeadingZero(days.toString());
+    hoursContent.innerHTML = addLeadingZero(hours.toString());
+    minutesContent.innerHTML = addLeadingZero(minutes.toString());
+    secondsContent.innerHTML = addLeadingZero(seconds.toString());
+  }, 1000);
 };
 
 refs.btnStart.addEventListener('click', initializeTimer);
