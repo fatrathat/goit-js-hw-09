@@ -1,17 +1,10 @@
-// Описаний в документації
 import flatpickr from 'flatpickr';
-// Додатковий імпорт стилів
 import 'flatpickr/dist/flatpickr.min.css';
 
 const refs = {
-  body: document.querySelector('body'),
   input: document.querySelector('#datetime-picker'),
   btnStart: document.querySelector('[data-start]'),
   timer: document.querySelector('.timer'),
-  days: document.querySelector('[data-days]'),
-  hours: document.querySelector('[data-hours]'),
-  minutes: document.querySelector('[data-minutes]'),
-  seconds: document.querySelector('[data-seconds]'),
 };
 
 let selectDay = null;
@@ -59,14 +52,27 @@ const addLeadingZero = value => {
   return value.padStart(2, 0);
 };
 
-const startTimer = () => {
-  const ms = convertMs(selectDay.getTime() - options.defaultDate.getTime());
-  const { days, hours, minutes, seconds } = ms;
-  refs.days.textContent = addLeadingZero(days.toString());
-  refs.hours.textContent = addLeadingZero(hours.toString());
-  refs.minutes.textContent = addLeadingZero(minutes.toString());
-  refs.seconds.textContent = addLeadingZero(seconds.toString());
+const initializeTimer = () => {
+  const days = document.querySelector('[data-days]');
+  const hours = document.querySelector('[data-hours]');
+  const minutes = document.querySelector('[data-minutes]');
+  const seconds = document.querySelector('[data-seconds]');
+
+  const updateTimer = () => {
+    const ms = convertMs(selectDay.getTime() - options.defaultDate.getTime());
+
+    days.innerHTML = addLeadingZero(ms.days.toString());
+    hours.innerHTML = addLeadingZero(ms.hours.toString());
+    minutes.innerHTML = addLeadingZero(ms.minutes.toString());
+    seconds.innerHTML = addLeadingZero(ms.seconds.toString());
+
+    if (ms <= 0) {
+      clearInterval(timeinterval);
+    }
+  };
+
+  updateTimer();
+  const timeinterval = setInterval(updateTimer, 1000);
 };
 
-refs.btnStart.addEventListener('click', startTimer);
-selectDate.onClose;
+refs.btnStart.addEventListener('click', initializeTimer);
