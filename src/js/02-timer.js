@@ -59,15 +59,23 @@ const initializeTimer = () => {
   const minutesContent = document.querySelector('[data-minutes]');
   const secondsContent = document.querySelector('[data-seconds]');
 
-  setInterval(() => {
+  const updateTimer = () => {
     let now = new Date();
-    const { days, hours, minutes, seconds } = convertMs(selectDay - now);
+    const diff = selectDay - now;
+    const { days, hours, minutes, seconds } = convertMs(diff);
 
     daysContent.innerHTML = addLeadingZero(days.toString());
     hoursContent.innerHTML = addLeadingZero(hours.toString());
     minutesContent.innerHTML = addLeadingZero(minutes.toString());
     secondsContent.innerHTML = addLeadingZero(seconds.toString());
-  }, 1000);
+
+    if (diff < 0) {
+      clearInterval(setIntervalTimer);
+    }
+  };
+
+  updateTimer();
+  const setIntervalTimer = setInterval(updateTimer, 1000);
 };
 
 refs.btnStart.addEventListener('click', initializeTimer);
