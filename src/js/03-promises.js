@@ -1,23 +1,46 @@
+import Notiflix from 'notiflix';
+
 const refs = {
   form: document.querySelector('form'),
 };
 
-function createPromise(position, delay) {
-  const myPromise = new Promise((resolve, reject) => {
+const onFulfill = success => {
+  console.log(`✅ ${success}`);
+};
+
+const onReject = reject => {
+  console.log(`❌ ${reject}`);
+};
+
+const createPromise = (position, delay) => {
+  return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-    if (shouldResolve) {
-      // Fulfill
-      resolve('Success! Value passed to resolve function');
-    } else {
-      // Reject
-      reject('Error! Error passed to reject function');
-    }
+
+    setTimeout(() => {
+      if (shouldResolve) {
+        resolve(`Fulfilled promise ${position} in ${delay} ms`);
+      } else {
+        reject(`Rejected promise ${position} in ${delay} ms`);
+      }
+    }, delay);
   });
-}
+};
 
 const handleSubmit = event => {
   event.preventDefault();
-  createPromise();
+  const amount = event.currentTarget.elements.amount.value;
+  const step = parseInt(event.currentTarget.elements.step.value);
+  const delay = parseInt(event.currentTarget.elements.delay.value);
+
+  const promises = [];
+
+  setInterval(() => {
+    promises.push(createPromise(amount, delay).then(onFulfill).catch(onReject));
+  }, step);
+
+  Promise.all(promises);
+  console.log(promises);
+  // promise.then(onFulfill, onReject);
 };
 
 refs.form.addEventListener('submit', handleSubmit);
