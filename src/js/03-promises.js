@@ -5,11 +5,11 @@ const refs = {
 };
 
 const onFulfill = success => {
-  console.log(`✅ ${success}`);
+  Notiflix.Notify.success(`✅ ${success}`);
 };
 
 const onReject = reject => {
-  console.log(`❌ ${reject}`);
+  Notiflix.Notify.failure(`❌ ${reject}`);
 };
 
 const createPromise = (position, delay) => {
@@ -34,7 +34,7 @@ const handleSubmit = event => {
 
   const promises = [];
 
-  setInterval(() => {
+  const interval = setInterval(() => {
     promises.push(createPromise(amount, delay).then(onFulfill).catch(onReject));
   }, step);
 
