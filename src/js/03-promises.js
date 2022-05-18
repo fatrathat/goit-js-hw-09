@@ -42,9 +42,7 @@ const handleSubmit = event => {
   }
 
   Promise.all(promises);
-
-  console.log(promises);
-  // promise.then(onFulfill, onReject);
+  refs.form.reset();
 };
 
 refs.form.addEventListener('submit', handleSubmit);
