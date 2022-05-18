@@ -42,7 +42,6 @@ const handleSubmit = event => {
   }
 
   Promise.all(promises);
-  refs.form.reset();
 };
 
 refs.form.addEventListener('submit', handleSubmit);
