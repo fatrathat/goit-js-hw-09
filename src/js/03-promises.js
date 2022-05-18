@@ -30,15 +30,19 @@ const handleSubmit = event => {
   event.preventDefault();
   const amount = event.currentTarget.elements.amount.value;
   const step = parseInt(event.currentTarget.elements.step.value);
-  const delay = parseInt(event.currentTarget.elements.delay.value);
+  let delay = parseInt(event.currentTarget.elements.delay.value);
 
   const promises = [];
 
-  const interval = setInterval(() => {
-    promises.push(createPromise(amount, delay).then(onFulfill).catch(onReject));
-  }, step);
+  for (let i = 1; i <= amount; i++) {
+    setTimeout(() => {
+      promises.push(createPromise(i, delay).then(onFulfill).catch(onReject));
+      delay += step;
+    }, delay);
+  }
 
   Promise.all(promises);
+
   console.log(promises);
   // promise.then(onFulfill, onReject);
 };
